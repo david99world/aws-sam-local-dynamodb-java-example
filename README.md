@@ -1,7 +1,7 @@
 # aws-sam-local-dynamodb-java-example
-This is a local DynamoDB example with a Java Lambda function all running locally
+This is a local DynamoDB example with a Java Lambda function all running locally.  Not really a lot of point to this, just thought just thought it'd be interesting.
 
-## Develop Java Lambda functions locally with a DynamoDB local.
+## Develop Java Lambda functions locally with a DynamoDB in a local container.
 
 This repository is an example of running a local Java Lambda function with a local DynamoDb running in a container.  The process is as follows:
 
@@ -63,7 +63,7 @@ This repository is an example of running a local Java Lambda function with a loc
     ![dynamoDbScreenshotShell](https://raw.githubusercontent.com/david99world/aws-sam-local-dynamodb-java-example/main/images/dynamoDbScreenshot.png)
 
 
-7.  Build the SAM Java function
+7.  Build the Lambda Java function
 
     You need to be in the cloned directory at this point, rather than the Lambda function.
 
@@ -90,7 +90,7 @@ This repository is an example of running a local Java Lambda function with a loc
     [*] Deploy: sam deploy --guided
     ```
 
-8.  Run the local Lambda function 
+8.  Run the local Java Lambda function 
 
     ```shell
     sam local invoke --docker-network lambda-local
