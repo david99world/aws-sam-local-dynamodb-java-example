@@ -28,22 +28,19 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 /**
  * Handler for requests to Lambda function.
  */
-public class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+public class App implements RequestHandler<Object, String> {
 
     private String DYNAMODB_TABLE_NAME = "orders_table";
 
-
-
-    public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
+    public String handleRequest(final Object input, final Context context) {
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
         headers.put("X-Custom-Header", "application/json");
 
-
         DynamoDB dynamoDB = new DynamoDB(AmazonDynamoDBClientBuilder.standard().withEndpointConfiguration(
             new AwsClientBuilder.EndpointConfiguration("http://dynamodb:8000/", "local")).build());
 
-        Table table =  .getTable(DYNAMODB_TABLE_NAME);
+        Table table =  dynamoDB.getTable(DYNAMODB_TABLE_NAME);
 
         ItemCollection<ScanOutcome> items = table.scan();
 
@@ -53,13 +50,8 @@ public class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatew
             System.out.println(iterator.next().toJSONPretty());
         }
 
-        APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent()
-                .withHeaders(headers);
+        String response = String.format("{ \"message\": \"Success\"}");
 
-        String output = String.format("{ \"message\": \"Success\"}");
-
-        return response
-                .withStatusCode(200)
-                .withBody(output);
+        return response;
     }
 }

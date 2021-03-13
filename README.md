@@ -12,6 +12,8 @@ This repository is an example of running a local Java Lambda function with a loc
  - Install [Maven](https://maven.apache.org/)
  - Install [Java11 OpenJDK](https://adoptopenjdk.net/)
  - Install [AWS CLI](https://aws.amazon.com/cli/)
+ - Install [AWS SAM](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html)
+ - Install [Docker](https://www.docker.com/)
 
 
 #### Steps
@@ -21,7 +23,7 @@ This repository is an example of running a local Java Lambda function with a loc
 
 2.  Create a local docker container for dynamodb.
 
-    We pass -sharedDb so it can be used by multiple processes.  We reuse the same docker network declared above.
+    We pass -sharedDb so it can be used by multiple processes.  We reuse the same docker network declared above.  This will run the latest dynamodb jar published by Amazon in a container 
 
     ```
     docker run -d -p 8000:8000 --network lambda-local --name dynamodb amazon/dynamodb-local -jar DynamoDBLocal.jar -sharedDb
@@ -29,11 +31,13 @@ This repository is an example of running a local Java Lambda function with a loc
 
 3.  Create table in dynamodb on port 8000
 
+    This AWS CLI command creates a table in your local dynamodb running in a container.  Make sure to include the endpoint-url so it sends to your local dynamodb
+
     ```
     aws dynamodb create-table --table-name orders_table --attribute-definitions AttributeName=orderId,AttributeType=S --key-schema AttributeName=orderId,KeyType=HASH --billing-mode PAY_PER_REQUEST --endpoint-url http://localhost:8000
     ```
 
-4.  Insert data into that table
+4.  Insert data into your local dynamodb table
 
     ```shell
     aws dynamodb put-item --table-name orders_table --item '{"orderId": {"S":"1"} }' --endpoint-url http://localhost:8000
@@ -86,9 +90,18 @@ This repository is an example of running a local Java Lambda function with a loc
     [*] Deploy: sam deploy --guided
     ```
 
-8.  Run on local docker network
+8.  Run the local Lambda function 
 
     ```shell
     sam local invoke --docker-network lambda-local
     ```
     This will invoke your lambda image locally with the target classes from the maven package you previously used.
+
+    You should see the following output, this is being read by the local Java Lambda function from the local dynamoDB
+
+    ```
+    Scan of orders_table
+    {
+    "orderId" : "1"
+    }
+    ```
