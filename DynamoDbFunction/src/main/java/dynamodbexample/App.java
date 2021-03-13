@@ -33,10 +33,6 @@ public class App implements RequestHandler<Object, String> {
     private String DYNAMODB_TABLE_NAME = "orders_table";
 
     public String handleRequest(final Object input, final Context context) {
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Content-Type", "application/json");
-        headers.put("X-Custom-Header", "application/json");
-
         DynamoDB dynamoDB = new DynamoDB(AmazonDynamoDBClientBuilder.standard().withEndpointConfiguration(
             new AwsClientBuilder.EndpointConfiguration("http://dynamodb:8000/", "local")).build());
 
