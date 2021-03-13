@@ -56,7 +56,7 @@ This repository is an example of running a local Java Lambda function with a loc
         else ppJson(data); // successful response
     });
     ```
-    ![dynamoDbScreenshotShell](https://raw.githubusercontent.com/david99world/aws-sam-local-dynamodb-java-example/master/dynamoDbScreenshot.png)
+    ![dynamoDbScreenshotShell](https://raw.githubusercontent.com/david99world/aws-sam-local-dynamodb-java-example/main/images/dynamoDbScreenshot.png)
 
 
 7.  Build the SAM Java function
